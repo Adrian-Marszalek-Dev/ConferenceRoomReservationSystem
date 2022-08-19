@@ -5,6 +5,12 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+interface AddOrganization {
+}
+
+interface UpdateOrganization {
+}
+
 @Entity
 public class Organization {
 
@@ -39,6 +45,3 @@ public class Organization {
         this.description = description;
     }
 }
-
-interface AddOrganization { }
-interface UpdateOrganization { }

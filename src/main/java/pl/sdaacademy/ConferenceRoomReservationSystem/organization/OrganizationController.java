@@ -6,8 +6,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import pl.sdaacademy.ConferenceRoomReservationSystem.SortType;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,27 +19,32 @@ class OrganizationController {
 
     private final OrganizationService organizationService;
 
-    OrganizationController(OrganizationService organizationService){
+    OrganizationController(OrganizationService organizationService) {
         this.organizationService = organizationService;
     }
 
     @GetMapping
-    List<Organization> getAll(){
-        return organizationService.getAllOrganizations();
+    List<Organization> getAll(@RequestParam(defaultValue = "ASC") SortType sortType) {
+        return organizationService.getAllOrganizations(sortType);
+    }
+
+    @GetMapping("/{name}")
+    Organization getById(String name) {
+        return organizationService.getOrganizations(name);
     }
 
     @PostMapping
-    Organization add(@Validated(value = AddOrganization.class) @RequestBody Organization organization){
+    Organization add(@Validated(value = AddOrganization.class) @RequestBody Organization organization) {
         return organizationService.addOrganization(organization);
     }
 
     @PutMapping("/{name}")
-    Organization update(@PathVariable String name, @Validated(value = UpdateOrganization.class) @RequestBody Organization organization){
+    Organization update(@PathVariable String name, @Validated(value = UpdateOrganization.class) @RequestBody Organization organization) {
         return organizationService.updateOrganization(name, organization);
     }
 
     @DeleteMapping("/{name}")
-    Organization delete(@PathVariable String name){
+    Organization delete(@PathVariable String name) {
         return organizationService.deleteOrganization(name);
     }
 
@@ -55,7 +60,12 @@ class OrganizationController {
     }
 
     @ExceptionHandler(value = NoSuchElementException.class)
-    ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException e){
+    ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
