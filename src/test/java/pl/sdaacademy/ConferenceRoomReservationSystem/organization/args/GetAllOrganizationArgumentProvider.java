@@ -21,9 +21,9 @@ public class GetAllOrganizationArgumentProvider implements ArgumentsProvider {
                                 new Organization("Uber", "Delivery company")
                         ),
                         Arrays.asList(
-                                new Organization("test", "IT Company"),
-                                new Organization("Google", "IT company"),
-                                new Organization("Uber", "Delivery company")
+                                new Organization(1L, "test", "IT Company"),
+                                new Organization(2L, "Google", "IT company"),
+                                new Organization(3L, "Uber", "Delivery company")
                         )
                 ),
                 Arguments.of(Collections.emptyList(), Collections.emptyList())

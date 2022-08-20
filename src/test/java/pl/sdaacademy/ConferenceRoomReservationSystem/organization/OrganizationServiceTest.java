@@ -19,29 +19,20 @@ import pl.sdaacademy.ConferenceRoomReservationSystem.organization.args.UpdateOrg
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 class OrganizationServiceTest {
 
-    @TestConfiguration
-    static class OrganizationServiceTestConfig{
-
-        @Bean
-        OrganizationService organizationService(OrganizationRepository organizationRepository){
-            return new OrganizationService(organizationRepository);
-        }
-    }
-
     @MockBean
     OrganizationRepository organizationRepository;
-
     @Autowired
     OrganizationService organizationService;
 
     @ParameterizedTest
     @ArgumentsSource(SortOrganizationArgumentProvider.class)
-    void when_get_all_with_arg_0_order_then_arg_1_order_info_should_be_provided_to_repo(SortType arg0, Sort arg1){
+    void when_get_all_with_arg_0_order_then_arg_1_order_info_should_be_provided_to_repo(SortType arg0, Sort arg1) {
         //given
         ArgumentCaptor<Sort> sortArgumentCaptor = ArgumentCaptor.forClass(Sort.class);
 
@@ -58,7 +49,7 @@ class OrganizationServiceTest {
         //given
         String name = "Intive";
         Organization arg = new Organization(name, "IT company");
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.of(arg));
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.of(arg));
         //when
         //then
         assertThrows(IllegalArgumentException.class, () -> {
@@ -67,40 +58,41 @@ class OrganizationServiceTest {
     }
 
     @Test
-    void  when_add_new_organization_then_it_should_be_added_to_repo(){
+    void when_add_new_organization_then_it_should_be_added_to_repo() {
         //given
         String name = "Intive";
         Organization arg = new Organization(name, "IT company");
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.empty());
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.empty());
         Mockito.when(organizationRepository.save(arg)).thenReturn(arg);
 
         //when
         Organization result = organizationService.addOrganization(arg);
 
         //then
-        assertEquals(arg,result);
+        assertEquals(arg, result);
         Mockito.verify(organizationRepository).save(arg);
 
     }
 
     @Test
-    void when_delete_existing_organization_then_it_should_be_removed_from_the_repo(){
+    void when_delete_existing_organization_then_it_should_be_removed_from_the_repo() {
         //given
         String name = "Intive";
-        Organization arg = new Organization(name, "IT company");
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.of(arg));
+        Long id = 1L;
+        Organization arg = new Organization(1L, name, "IT company");
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.of(arg));
         //when
         Organization result = organizationService.deleteOrganization(name);
         //then
-        assertEquals(arg,result);
-        Mockito.verify(organizationRepository).deleteById(name);
+        assertEquals(arg, result);
+        Mockito.verify(organizationRepository).deleteById(id);
     }
 
     @Test
-    void when_delete_non_existing_organization_then_exception_should_be_thrown(){
+    void when_delete_non_existing_organization_then_exception_should_be_thrown() {
         //given
         String name = "Intive";
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.empty());
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.empty());
         //when
         //then
         assertThrows(NoSuchElementException.class, () -> {
@@ -109,53 +101,62 @@ class OrganizationServiceTest {
     }
 
     @Test
-    void when_update_non_existing_organization_then_exception_should_be_thrown(){
+    void when_update_non_existing_organization_then_exception_should_be_thrown() {
         //given
         String name = "Intive";
         Organization arg = new Organization(name, "IT company");
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.empty());
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.empty());
         //when
         //then
         assertThrows(NoSuchElementException.class, () -> {
-            organizationService.updateOrganization(name,arg);
+            organizationService.updateOrganization(name, arg);
         });
     }
 
     @ParameterizedTest
     @ArgumentsSource(UpdateOrganizationArgumentProvider.class)
-    void when_update_arg_1_organization_with_arg_2_data_then_organization_should_be_updated_to_arg_3(String name, Organization arg1, Organization arg2, Organization arg3){
+    void when_update_arg_1_organization_with_arg_2_data_then_organization_should_be_updated_to_arg_3(String name, Organization arg1, Organization arg2, Organization arg3) {
         //given
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.of(arg1));
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.of(arg1));
         Mockito.when(organizationRepository.save(arg1)).thenReturn(arg3);
         //when
-        Organization result = organizationService.updateOrganization(name,arg2);
+        Organization result = organizationService.updateOrganization(name, arg2);
         //then
-        assertEquals(arg3,result);
+        assertEquals(arg3, result);
         Mockito.verify(organizationRepository).save(arg3);
     }
 
     @Test
-    void when_get_non_existing_organization_then_exception_should_be_thrown(){
+    void when_get_non_existing_organization_then_exception_should_be_thrown() {
         //given
         String name = "Intive";
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.empty());
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.empty());
         //when
         //then
         assertThrows(NoSuchElementException.class, () -> {
-            organizationService.getOrganizations(name);
+            organizationService.getOrganization(name);
         });
     }
 
     @Test
-    void when_get_existing_organization_then_organization_should_be_returned(){
+    void when_get_existing_organization_then_organization_should_be_returned() {
         //given
         String name = "Intive";
         Organization arg = new Organization(name, "IT company");
-        Mockito.when(organizationRepository.findById(name)).thenReturn(Optional.of(arg));
+        Mockito.when(organizationRepository.findByName(name)).thenReturn(Optional.of(arg));
         //when
-        Organization result = organizationService.getOrganizations(name);
+        Organization result = organizationService.getOrganization(name);
         //then
-        assertEquals(arg,result);
-        Mockito.verify(organizationRepository).findById(name);
+        assertEquals(arg, result);
+        Mockito.verify(organizationRepository).findByName(name);
+    }
+
+    @TestConfiguration
+    static class OrganizationServiceTestConfig {
+
+        @Bean
+        OrganizationService organizationService(OrganizationRepository organizationRepository) {
+            return new OrganizationService(organizationRepository);
+        }
     }
 }
