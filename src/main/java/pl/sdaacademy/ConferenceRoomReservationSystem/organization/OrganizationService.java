@@ -48,6 +48,10 @@ class OrganizationService {
             organizationToUpdate.setDescription(organization.getDescription());
         }
         if (organization.getName() != null && !organization.getName().equals(organizationToUpdate.getName())) {
+            organizationRepository.findByName(organization.getName())
+                            .ifPresent(o -> {
+                                throw new IllegalArgumentException("Organization already exixts!");
+                            });
             organizationToUpdate.setName(organization.getName());
         }
         return organizationRepository.save(organizationToUpdate);

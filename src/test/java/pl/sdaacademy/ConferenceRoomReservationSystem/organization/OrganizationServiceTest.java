@@ -150,6 +150,24 @@ class OrganizationServiceTest {
         assertEquals(arg, result);
         Mockito.verify(organizationRepository).findByName(name);
     }
+    @Test
+    void when_update_organization_name_which_is_not_unique_then_exception_should_be_thrown(){
+        //given
+        String name1 = "Intive";
+        Organization existingOrg1 = new Organization(name1, "Delivery company");
+        String name2 = "Tieto";
+        Organization existingOrg2 = new Organization(name2, "Delivery company");
+        Organization updateOrganization = new Organization(name2, "Delivery company");
+        Mockito.when(organizationRepository.findByName(name1)).thenReturn(Optional.of(existingOrg1));
+        Mockito.when(organizationRepository.findByName(name2)).thenReturn(Optional.of(existingOrg2));
+
+        //when
+        //then
+        assertThrows(IllegalArgumentException.class, () -> {
+            organizationService.updateOrganization(name1, updateOrganization);
+        });
+        Mockito.verify(organizationRepository, Mockito.never()).save(updateOrganization);
+    }
 
     @TestConfiguration
     static class OrganizationServiceTestConfig {
@@ -159,4 +177,5 @@ class OrganizationServiceTest {
             return new OrganizationService(organizationRepository);
         }
     }
+
 }
