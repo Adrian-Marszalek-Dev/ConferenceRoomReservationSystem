@@ -30,7 +30,7 @@ class OrganizationController {
 
     @GetMapping("/{name}")
     Organization getById(String name) {
-        return organizationService.getOrganizations(name);
+        return organizationService.getOrganization(name);
     }
 
     @PostMapping
