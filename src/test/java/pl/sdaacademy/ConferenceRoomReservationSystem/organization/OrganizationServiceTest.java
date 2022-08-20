@@ -150,8 +150,9 @@ class OrganizationServiceTest {
         assertEquals(arg, result);
         Mockito.verify(organizationRepository).findByName(name);
     }
+
     @Test
-    void when_update_organization_name_which_is_not_unique_then_exception_should_be_thrown(){
+    void when_update_organization_name_which_is_not_unique_then_exception_should_be_thrown() {
         //given
         String name1 = "Intive";
         Organization existingOrg1 = new Organization(name1, "Delivery company");
