@@ -6,12 +6,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import pl.sdaacademy.ConferenceRoomReservationSystem.Error;
 import pl.sdaacademy.ConferenceRoomReservationSystem.SortType;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RestController
 @RequestMapping("/organizations")
@@ -49,23 +47,34 @@ class OrganizationController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+    ResponseEntity<Error<Map<String, List<String>>>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, List<String>> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            List<String> params = errors.getOrDefault(fieldName, new ArrayList<>());
+            params.add(errorMessage);
+            errors.put(fieldName, params);
+
         });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Error<>(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                errors
+        ), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = NoSuchElementException.class)
-    ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    ResponseEntity<Error> handleNoSuchElementException(NoSuchElementException e) {
+        return new ResponseEntity<>(new Error<>(HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase()
+                , e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
-    ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<Error> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(new Error<>(HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

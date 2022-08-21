@@ -20,8 +20,8 @@ public class Organization {
     @GeneratedValue
     private Long id;
 
-    @Size(min = 2, max = 20, groups = {AddOrganization.class, UpdateOrganization.class})
     @NotBlank(groups = AddOrganization.class)
+    @Size(min = 2, max = 20, groups = {AddOrganization.class, UpdateOrganization.class})
     private String name;
     private String description;
 
