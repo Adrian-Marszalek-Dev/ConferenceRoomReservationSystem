@@ -2,13 +2,11 @@ package pl.sdaacademy.ConferenceRoomReservationSystem.conferenceRoom;
 
 import org.hibernate.annotations.GenericGenerator;
 import pl.sdaacademy.ConferenceRoomReservationSystem.organization.Organization;
+import pl.sdaacademy.ConferenceRoomReservationSystem.reservation.Reservation;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
-
 
 
 @Entity
@@ -31,10 +29,30 @@ public class ConferenceRoom {
     @ManyToOne
     private Organization organization;
 
-    public ConferenceRoom(){
+    @OneToMany(mappedBy = "conferenceRoom")
+    private List<Reservation> reservations;
+
+    public ConferenceRoom() {
     }
 
-    public ConferenceRoom(String name, String identifier, Integer level, Boolean isAvailable, Integer numberOfSeats, Organization organization) {
+    public ConferenceRoom(String id) {
+        this.id = id;
+    }
+
+    public ConferenceRoom(String id, String name, String identifier, Integer level, Boolean isAvailable,
+                          Integer numberOfSeats, Organization organization, List<Reservation> reservations) {
+        this.id = id;
+        this.name = name;
+        this.identifier = identifier;
+        this.level = level;
+        this.isAvailable = isAvailable;
+        this.numberOfSeats = numberOfSeats;
+        this.organization = organization;
+        this.reservations = reservations;
+    }
+
+    public ConferenceRoom(String name, String identifier, Integer level, Boolean isAvailable,
+                          Integer numberOfSeats, Organization organization) {
         this.name = name;
         this.identifier = identifier;
         this.level = level;
@@ -43,7 +61,8 @@ public class ConferenceRoom {
         this.organization = organization;
     }
 
-    public ConferenceRoom(String id, String name, String identifier, Integer level, Boolean isAvailable, Integer numberOfSeats) {
+    public ConferenceRoom(String id, String name, String identifier, Integer level,
+                          Boolean isAvailable, Integer numberOfSeats) {
         this.id = id;
         this.name = name;
         this.identifier = identifier;
@@ -52,7 +71,8 @@ public class ConferenceRoom {
         this.numberOfSeats = numberOfSeats;
     }
 
-    public ConferenceRoom(String id, String name, String identifier, Integer level, Boolean isAvailable, Integer numberOfSeats, Organization organization) {
+    public ConferenceRoom(String id, String name, String identifier, Integer level,
+                          Boolean isAvailable, Integer numberOfSeats, Organization organization) {
         this.id = id;
         this.name = name;
         this.identifier = identifier;
@@ -119,6 +139,14 @@ public class ConferenceRoom {
         this.organization = organization;
     }
 
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
     @Override
     public String toString() {
         return "ConferenceRoom{" +
@@ -129,6 +157,7 @@ public class ConferenceRoom {
                 ", isAvailable=" + isAvailable +
                 ", numberOfSeats=" + numberOfSeats +
                 ", organization=" + organization +
+                ", reservations=" + reservations +
                 '}';
     }
 
@@ -137,11 +166,17 @@ public class ConferenceRoom {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConferenceRoom that = (ConferenceRoom) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(identifier, that.identifier) && Objects.equals(level, that.level) && Objects.equals(isAvailable, that.isAvailable) && Objects.equals(numberOfSeats, that.numberOfSeats) && Objects.equals(organization, that.organization);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
+                Objects.equals(identifier, that.identifier) &&
+                Objects.equals(level, that.level) &&
+                Objects.equals(isAvailable, that.isAvailable) &&
+                Objects.equals(numberOfSeats, that.numberOfSeats) &&
+                Objects.equals(organization, that.organization) &&
+                Objects.equals(reservations, that.reservations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, identifier, level, isAvailable, numberOfSeats, organization);
+        return Objects.hash(id, name, identifier, level, isAvailable, numberOfSeats, organization, reservations);
     }
 }

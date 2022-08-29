@@ -16,7 +16,8 @@ class OrganizationService {
     private final OrganizationTransformer organizationTransformer;
 
     @Autowired
-    OrganizationService(OrganizationRepository organizationRepository, OrganizationTransformer organizationTransformer) {
+    OrganizationService(OrganizationRepository organizationRepository,
+                        OrganizationTransformer organizationTransformer) {
         this.organizationRepository = organizationRepository;
         this.organizationTransformer = organizationTransformer;
     }
@@ -43,7 +44,8 @@ class OrganizationService {
     }
 
     OrganizationDto deleteOrganization(String name) {
-        Organization organization = organizationRepository.findByName(name).orElseThrow(() -> new NoSuchElementException(""));
+        Organization organization = organizationRepository.findByName(name).orElseThrow(() ->
+                new NoSuchElementException(""));
         organizationRepository.deleteById(organization.getId());
         return organizationTransformer.toDto(organization);
     }
@@ -58,9 +60,9 @@ class OrganizationService {
         }
         if (organization.getName() != null && !organization.getName().equals(organizationToUpdate.getName())) {
             organizationRepository.findByName(organization.getName())
-                            .ifPresent(o -> {
-                                throw new IllegalArgumentException("Organization already exists!");
-                            });
+                    .ifPresent(o -> {
+                        throw new IllegalArgumentException("Organization already exists!");
+                    });
             organizationToUpdate.setName(organization.getName());
         }
         return organizationTransformer.toDto(organizationRepository.save(organizationToUpdate));

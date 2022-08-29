@@ -3,11 +3,12 @@ package pl.sdaacademy.ConferenceRoomReservationSystem.conferenceRoom;
 import javax.validation.constraints.*;
 import java.util.Objects;
 
-interface AddConferenceRoom{
+interface AddConferenceRoom {
 }
 
-interface UpdateConferenceRoom{
+interface UpdateConferenceRoom {
 }
+
 public class ConferenceRoomDto {
 
     private String id;
@@ -32,7 +33,8 @@ public class ConferenceRoomDto {
     public ConferenceRoomDto() {
     }
 
-    public ConferenceRoomDto(String id, String name, String identifier, Integer level, Boolean isAvailable, Integer numberOfSeats, String organization) {
+    public ConferenceRoomDto(String id, String name, String identifier, Integer level, Boolean isAvailable,
+                             Integer numberOfSeats, String organization) {
         this.id = id;
         this.name = name;
         this.identifier = identifier;
@@ -103,7 +105,12 @@ public class ConferenceRoomDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConferenceRoomDto that = (ConferenceRoomDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(identifier, that.identifier) && Objects.equals(level, that.level) && Objects.equals(isAvailable, that.isAvailable) && Objects.equals(numberOfSeats, that.numberOfSeats) && Objects.equals(organization, that.organization);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
+                Objects.equals(identifier, that.identifier) &&
+                Objects.equals(level, that.level) &&
+                Objects.equals(isAvailable, that.isAvailable) &&
+                Objects.equals(numberOfSeats, that.numberOfSeats) &&
+                Objects.equals(organization, that.organization);
     }
 
     @Override

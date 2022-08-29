@@ -6,7 +6,7 @@ import pl.sdaacademy.ConferenceRoomReservationSystem.organization.Organization;
 @Component
 public class ConferenceRoomTransformer {
 
-    public ConferenceRoomDto toDto(ConferenceRoom conferenceRoom){
+    public ConferenceRoomDto toDto(ConferenceRoom conferenceRoom) {
         return new ConferenceRoomDto(
                 conferenceRoom.getId(),
                 conferenceRoom.getName(),
@@ -18,7 +18,7 @@ public class ConferenceRoomTransformer {
         );
     }
 
-    public ConferenceRoom fromDto(ConferenceRoomDto conferenceRoomDto){
+    public ConferenceRoom fromDto(ConferenceRoomDto conferenceRoomDto) {
         return new ConferenceRoom(
                 conferenceRoomDto.getId(),
                 conferenceRoomDto.getName(),

@@ -14,7 +14,7 @@ class OrganizationTransformer {
         this.conferenceRoomTransformer = conferenceRoomTransformer;
     }
 
-    OrganizationDto toDto(Organization organization){
+    OrganizationDto toDto(Organization organization) {
         return new OrganizationDto(
                 organization.getId(),
                 organization.getName(),
@@ -25,7 +25,7 @@ class OrganizationTransformer {
         );
     }
 
-    Organization fromDto(OrganizationDto organizationDto){
+    Organization fromDto(OrganizationDto organizationDto) {
         return new Organization(
                 organizationDto.getId(),
                 organizationDto.getName(),

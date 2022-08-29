@@ -5,7 +5,7 @@ public class Error<T> {
     private String message;
     private T details;
 
-    public Error(){
+    public Error() {
     }
 
     public Error(int code, String message, T details) {

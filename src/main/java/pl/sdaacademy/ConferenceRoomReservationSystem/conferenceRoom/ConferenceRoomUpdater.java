@@ -12,12 +12,13 @@ class ConferenceRoomUpdater {
     private final ConferenceRoomRepository conferenceRoomRepository;
     private final OrganizationRepository organizationRepository;
 
-    public ConferenceRoomUpdater(ConferenceRoomRepository conferenceRoomRepository, OrganizationRepository organizationRepository) {
+    public ConferenceRoomUpdater(ConferenceRoomRepository conferenceRoomRepository,
+                                 OrganizationRepository organizationRepository) {
         this.conferenceRoomRepository = conferenceRoomRepository;
         this.organizationRepository = organizationRepository;
     }
 
-    ConferenceRoom update(String id, ConferenceRoom conferenceRoom){
+    ConferenceRoom update(String id, ConferenceRoom conferenceRoom) {
         ConferenceRoom conferenceRoomToUpdate = conferenceRoomRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("No conference room to update found!"));
         boolean isNameUpdated = updateName(conferenceRoomToUpdate, conferenceRoom);
@@ -32,8 +33,8 @@ class ConferenceRoomUpdater {
 
     private void checkIfConferenceRoomIsUnique(ConferenceRoom conferenceRoomToUpdate,
                                                boolean isNameUpdated,
-                                               boolean isOrganizationUpdated){
-        if (!isNameUpdated && !isOrganizationUpdated){
+                                               boolean isOrganizationUpdated) {
+        if (!isNameUpdated && !isOrganizationUpdated) {
             return;
         }
         conferenceRoomRepository.findByNameAndOrganization_Name(
@@ -44,7 +45,7 @@ class ConferenceRoomUpdater {
                 });
     }
 
-    private boolean updateName(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom){
+    private boolean updateName(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom) {
         String name = conferenceRoom.getName();
         if (name != null) {
             conferenceRoomToUpdate.setName(name);
@@ -53,35 +54,35 @@ class ConferenceRoomUpdater {
         return false;
     }
 
-    private void updateAvailability(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom){
+    private void updateAvailability(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom) {
         Boolean isAvailable = conferenceRoom.getAvailable();
         if (isAvailable != null) {
             conferenceRoomToUpdate.setAvailable(isAvailable);
         }
     }
 
-    private void updateIdentifier(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom){
+    private void updateIdentifier(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom) {
         String identifier = conferenceRoom.getIdentifier();
         if (identifier != null) {
             conferenceRoomToUpdate.setIdentifier(identifier);
         }
     }
 
-    private void updateNumberOfSeats(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom){
+    private void updateNumberOfSeats(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom) {
         Integer numberOfSeats = conferenceRoom.getNumberOfSeats();
         if (numberOfSeats != null) {
             conferenceRoomToUpdate.setNumberOfSeats(numberOfSeats);
         }
     }
 
-    private void updateLevel(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom){
+    private void updateLevel(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom) {
         Integer level = conferenceRoom.getLevel();
         if (level != null) {
             conferenceRoomToUpdate.setLevel(level);
         }
     }
 
-    private boolean updateOrganization(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom){
+    private boolean updateOrganization(ConferenceRoom conferenceRoomToUpdate, ConferenceRoom conferenceRoom) {
         Organization organization = conferenceRoom.getOrganization();
         if (organization != null) {
             Organization organizationFromRepo = organizationRepository.findByName(organization.getName())

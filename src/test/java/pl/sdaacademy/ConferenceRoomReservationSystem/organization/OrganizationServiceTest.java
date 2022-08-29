@@ -72,7 +72,7 @@ class OrganizationServiceTest {
         Mockito.when(organizationRepository.save(arg)).thenReturn(arg);
         Mockito.when(organizationTransformer.fromDto(argDto)).thenReturn(arg);
         Mockito.when(organizationTransformer.toDto(arg)).thenReturn(argDto);
-        //when
+        //when[
         OrganizationDto result = organizationService.addOrganization(argDto);
 
         //then

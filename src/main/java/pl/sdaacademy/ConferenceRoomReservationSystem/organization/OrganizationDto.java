@@ -23,7 +23,7 @@ public class OrganizationDto {
     private String description;
     private List<ConferenceRoomDto> conferenceRooms = new ArrayList<>();
 
-    public OrganizationDto(){
+    public OrganizationDto() {
     }
 
     public OrganizationDto(String name, String description) {
@@ -81,7 +81,8 @@ public class OrganizationDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrganizationDto that = (OrganizationDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(conferenceRooms, that.conferenceRooms);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) && Objects.equals(conferenceRooms, that.conferenceRooms);
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.sdaacademy.ConferenceRoomReservationSystem.SortType;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/organizations")
@@ -33,7 +33,8 @@ class OrganizationController {
     }
 
     @PutMapping("/{name}")
-    OrganizationDto update(@PathVariable String name, @Validated(UpdateOrganization.class) @RequestBody OrganizationDto organization) {
+    OrganizationDto update(@PathVariable String name, @Validated(UpdateOrganization.class)
+    @RequestBody OrganizationDto organization) {
         return organizationService.updateOrganization(name, organization);
     }
 
@@ -41,7 +42,6 @@ class OrganizationController {
     OrganizationDto delete(@PathVariable String name) {
         return organizationService.deleteOrganization(name);
     }
-
 
 
 }
