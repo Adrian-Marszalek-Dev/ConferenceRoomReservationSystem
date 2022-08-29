@@ -17,8 +17,19 @@ class ConferenceRoomController {
     }
 
     @GetMapping
-    List<ConferenceRoomDto> getAll(){
-        return conferenceRoomService.getAllConferenceRooms();
+    List<ConferenceRoomDto> getAll(
+            @RequestParam(required = false) String identifier,
+            @RequestParam(required = false) Integer level,
+            @RequestParam(required = false) String organizationName,
+            @RequestParam(required = false) Boolean availability,
+            @RequestParam(required = false) Integer numberOfSeats
+    ){
+        return conferenceRoomService.getConferenceRoomBy(identifier, level, organizationName, availability, numberOfSeats);
+    }
+
+    @GetMapping("/{id}")
+    ConferenceRoomDto getById(@PathVariable String id){
+        return conferenceRoomService.getConferenceRoomById(id);
     }
 
     @PostMapping

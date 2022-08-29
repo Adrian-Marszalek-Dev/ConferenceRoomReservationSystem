@@ -1,7 +1,10 @@
 package pl.sdaacademy.ConferenceRoomReservationSystem.conferenceRoom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import pl.sdaacademy.ConferenceRoomReservationSystem.SortType;
 import pl.sdaacademy.ConferenceRoomReservationSystem.organization.Organization;
 import pl.sdaacademy.ConferenceRoomReservationSystem.organization.OrganizationRepository;
 
@@ -29,6 +32,31 @@ class ConferenceRoomService {
 
     List<ConferenceRoomDto> getAllConferenceRooms() {
         return conferenceRoomRepository.findAll().stream()
+                .map(conferenceRoomTransformer::toDto)
+                .collect(Collectors.toList());
+    }
+
+    ConferenceRoomDto getConferenceRoomById(String id){
+        return conferenceRoomRepository.findById(id)
+                .map(conferenceRoomTransformer::toDto)
+                .orElseThrow(()->{
+                    throw new NoSuchElementException("No conference room found!");
+                });
+    }
+
+    List<ConferenceRoomDto> getConferenceRoomBy(
+            String identifier,
+            Integer level,
+            String organizationName,
+            Boolean availability,
+            Integer numberOfSeats
+    ){
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreNullValues();
+        Example<ConferenceRoom> conferenceRoomExample = Example.of(
+                new ConferenceRoom(null, identifier, level, availability, numberOfSeats, new Organization(organizationName)),
+                exampleMatcher
+        );
+        return conferenceRoomRepository.findAll(conferenceRoomExample).stream()
                 .map(conferenceRoomTransformer::toDto)
                 .collect(Collectors.toList());
     }
