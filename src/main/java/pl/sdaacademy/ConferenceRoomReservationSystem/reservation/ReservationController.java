@@ -2,6 +2,9 @@ package pl.sdaacademy.ConferenceRoomReservationSystem.reservation;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/reservations")
 class ReservationController {
@@ -10,6 +13,17 @@ class ReservationController {
 
     ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
+    }
+
+    @GetMapping
+    List<ReservationDto> getAll(
+            @RequestParam(required = false) String id,
+            @RequestParam(required = false) LocalDateTime startDate,
+            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam(required = false) String reservationName,
+            @RequestParam(required = false) String conferenceRoomId
+    ) {
+        return reservationService.getAllReservations(id, startDate, endDate, reservationName, conferenceRoomId);
     }
 
     @PostMapping

@@ -6,7 +6,9 @@ import pl.sdaacademy.ConferenceRoomReservationSystem.conferenceRoom.ConferenceRo
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 class ReservationService {
@@ -112,6 +114,12 @@ class ReservationService {
             validateConferenceRoom(conferenceRoom);
             reservationFromDb.setConferenceRoom(conferenceRoom);
         }
+    }
+
+    List<ReservationDto> getAllReservations(String id, LocalDateTime startDate, LocalDateTime endDate, String reservationName, String conferenceRoomId){
+        return reservationRepository.findAll().stream()
+                .map(reservationTransformer::toDto)
+                .collect(Collectors.toList());
     }
 
     ReservationDto deleteReservation(String id) {
