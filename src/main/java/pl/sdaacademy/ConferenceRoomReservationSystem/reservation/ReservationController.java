@@ -23,8 +23,10 @@ class ReservationController {
             @RequestParam(required = false) String reservationName,
             @RequestParam(required = false) String conferenceRoomId
     ) {
-        return reservationService.getAllReservations(id, startDate, endDate, reservationName, conferenceRoomId);
+        return reservationService.getReservationsBy(id, startDate, endDate, reservationName, conferenceRoomId);
     }
+
+
 
     @PostMapping
     ReservationDto add(@RequestBody ReservationDto reservationDto) {

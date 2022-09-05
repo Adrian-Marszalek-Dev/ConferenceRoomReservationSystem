@@ -1,5 +1,7 @@
 package pl.sdaacademy.ConferenceRoomReservationSystem.reservation;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import pl.sdaacademy.ConferenceRoomReservationSystem.conferenceRoom.ConferenceRoom;
 import pl.sdaacademy.ConferenceRoomReservationSystem.conferenceRoom.ConferenceRoomRepository;
@@ -116,8 +118,19 @@ class ReservationService {
         }
     }
 
-    List<ReservationDto> getAllReservations(String id, LocalDateTime startDate, LocalDateTime endDate, String reservationName, String conferenceRoomId){
-        return reservationRepository.findAll().stream()
+    List<ReservationDto> getReservationsBy(
+            String id,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            String reservationName,
+            String conferenceRoomId)
+    {
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreNullValues();
+        Example<Reservation> reservationExample = Example.of(
+                new Reservation(id,startDate,endDate,reservationName,new ConferenceRoom(conferenceRoomId)),
+                exampleMatcher
+        );
+        return reservationRepository.findAll(reservationExample).stream()
                 .map(reservationTransformer::toDto)
                 .collect(Collectors.toList());
     }
